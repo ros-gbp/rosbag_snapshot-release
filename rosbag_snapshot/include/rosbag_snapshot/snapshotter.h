@@ -42,7 +42,7 @@
 #include <std_srvs/SetBool.h>
 #include <topic_tools/shape_shifter.h>
 #include <rosgraph_msgs/TopicStatistics.h>
-#include <rosbag_msgs/SnapshotStatus.h>
+#include <rosbag_snapshot_msgs/SnapshotStatus.h>
 #include <rosbag/bag.h>
 #include <rosbag/macros.h>
 #include <deque>
@@ -175,6 +175,8 @@ class ROSBAG_DECL Snapshotter
 {
 public:
   explicit Snapshotter(SnapshotterOptions const& options);
+  ~Snapshotter();
+
   // Sets up callbacks and spins until node is killed
   int run();
 
