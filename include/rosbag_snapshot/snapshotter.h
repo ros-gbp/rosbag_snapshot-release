@@ -36,6 +36,7 @@
 
 #include <boost/atomic.hpp>
 #include <boost/thread/mutex.hpp>
+#include <boost/thread/shared_mutex.hpp>
 #include <ros/ros.h>
 #include <ros/time.h>
 #include <rosbag_snapshot_msgs/TriggerSnapshot.h>
@@ -72,7 +73,7 @@ struct ROSBAG_DECL SnapshotterTopicOptions
 
   // Maximum difference in time from newest and oldest message in buffer before older messages are removed
   ros::Duration duration_limit_;
-  // Maximum memory usage of the buffer before older messages ar eremoved
+  // Maximum memory usage of the buffer before older messages are removed
   int32_t memory_limit_;
 
   SnapshotterTopicOptions(ros::Duration duration_limit = INHERIT_DURATION_LIMIT,
@@ -90,6 +91,9 @@ struct ROSBAG_DECL SnapshotterOptions
   int32_t default_memory_limit_;
   // Period between publishing topic status messages. If <= ros::Duration(0), don't publish status
   ros::Duration status_period_;
+  // Flag if all topics should be recorded
+  bool all_topics_;
+
   typedef std::map<std::string, SnapshotterTopicOptions> topics_t;
   // Provides list of topics to snapshot and their limit configurations
   topics_t topics_;
@@ -97,8 +101,8 @@ struct ROSBAG_DECL SnapshotterOptions
   SnapshotterOptions(ros::Duration default_duration_limit = ros::Duration(30), int32_t default_memory_limit = -1,
                     ros::Duration status_period = ros::Duration(1));
 
-  // Add a new topic to the configuration
-  void addTopic(std::string const& topic,
+  // Add a new topic to the configuration, returns false if the topic was already present
+  bool addTopic(std::string const& topic,
                 ros::Duration duration_limit = SnapshotterTopicOptions::INHERIT_DURATION_LIMIT,
                 int32_t memory_limit = SnapshotterTopicOptions::INHERIT_MEMORY_LIMIT);
 };
@@ -197,6 +201,7 @@ private:
   ros::ServiceServer enable_server_;
   ros::Publisher status_pub_;
   ros::Timer status_timer_;
+  ros::Timer poll_topic_timer_;
 
   // Replace individual topic limits with node defaults if they are flagged for it (see SnapshotterTopicOptions)
   void fixTopicOptions(SnapshotterTopicOptions& options);
@@ -222,6 +227,8 @@ private:
   void resume();
   // Publish status containing statistics of currently buffered topics and other state
   void publishStatus(ros::TimerEvent const& e);
+  // Poll master for new topics
+  void pollTopics(ros::TimerEvent const& e, rosbag_snapshot::SnapshotterOptions *options);
   // Write the parts of message_queue within the time constraints of req to the queue
   // If returns false, there was an error opening/writing the bag and an error message was written to res.message
   bool writeTopic(rosbag::Bag& bag, MessageQueue& message_queue, std::string const& topic,
