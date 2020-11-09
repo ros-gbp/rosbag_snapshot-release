@@ -1,3 +1,28 @@
+## rosbag_snapshot (kinetic) - 1.0.3-1
+
+The packages in the `rosbag_snapshot` repository were released into the `kinetic` distro by running `/usr/bin/bloom-release rosbag_snapshot -r kinetic` on `Mon, 09 Nov 2020 14:48:57 -0000`
+
+These packages were released:
+- `rosbag_snapshot`
+- `rosbag_snapshot_msgs`
+
+Version of package(s) in repository `rosbag_snapshot`:
+
+- upstream repository: https://github.com/ros/rosbag_snapshot.git
+- release repository: https://github.com/ros-gbp/rosbag_snapshot-release.git
+- rosdistro version: `1.0.2-1`
+- old version: `1.0.2-1`
+- new version: `1.0.3-1`
+
+Versions of tools used:
+
+- bloom version: `0.10.0`
+- catkin_pkg version: `0.4.23`
+- rosdep version: `0.19.0`
+- rosdistro version: `0.8.3`
+- vcstools version: `0.1.42`
+
+
 ## rosbag_snapshot (kinetic) - 1.0.2-1
 
 The packages in the `rosbag_snapshot` repository were released into the `kinetic` distro by running `/usr/local/bin/bloom-release rosbag_snapshot -r kinetic -y` on `Mon, 17 Aug 2020 17:30:47 -0000`
