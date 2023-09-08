@@ -1,3 +1,28 @@
+## rosbag_snapshot (noetic) - 1.0.5-1
+
+The packages in the `rosbag_snapshot` repository were released into the `noetic` distro by running `/usr/bin/bloom-release -r noetic rosbag_snapshot` on `Fri, 08 Sep 2023 19:13:32 -0000`
+
+These packages were released:
+- `rosbag_snapshot`
+- `rosbag_snapshot_msgs`
+
+Version of package(s) in repository `rosbag_snapshot`:
+
+- upstream repository: https://github.com/ros/rosbag_snapshot.git
+- release repository: https://github.com/ros-gbp/rosbag_snapshot-release.git
+- rosdistro version: `1.0.4-1`
+- old version: `1.0.4-1`
+- new version: `1.0.5-1`
+
+Versions of tools used:
+
+- bloom version: `0.11.2`
+- catkin_pkg version: `0.5.2`
+- rosdep version: `0.22.2`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## rosbag_snapshot (noetic) - 1.0.4-1
 
 The packages in the `rosbag_snapshot` repository were released into the `noetic` distro by running `/usr/bin/bloom-release rosbag_snapshot -r noetic -y` on `Tue, 02 Aug 2022 18:44:10 -0000`
