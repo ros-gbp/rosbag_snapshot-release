@@ -242,8 +242,6 @@ MessageQueue::range_t MessageQueue::rangeFromTimes(Time const& start, Time const
   return range_t(begin, end);
 }
 
-const int Snapshotter::QUEUE_SIZE = 10;
-
 Snapshotter::Snapshotter(SnapshotterOptions const& options) : options_(options), recording_(true), writing_(false)
 {
   status_pub_ = nh_.advertise<rosbag_snapshot_msgs::SnapshotStatus>("snapshot_status", 10);
@@ -316,12 +314,12 @@ void Snapshotter::subscribe(string const& topic, boost::shared_ptr<MessageQueue>
   shared_ptr<ros::Subscriber> sub(boost::make_shared<ros::Subscriber>());
   ros::SubscribeOptions ops;
   ops.topic = topic;
-  ops.queue_size = QUEUE_SIZE;
+  ops.queue_size = options_.queue_size_;
   ops.md5sum = ros::message_traits::md5sum<topic_tools::ShapeShifter>();
   ops.datatype = ros::message_traits::datatype<topic_tools::ShapeShifter>();
   ops.helper =
       boost::make_shared<ros::SubscriptionCallbackHelperT<const ros::MessageEvent<topic_tools::ShapeShifter const>&> >(
-          boost::bind(&Snapshotter::topicCB, this, boost::placeholders::_1, queue));
+          std::bind(&Snapshotter::topicCB, this, std::placeholders::_1, queue));
   *sub = nh_.subscribe(ops);
   queue->setSubscriber(sub);
 }
@@ -608,8 +606,8 @@ int Snapshotter::run()
   // Start timer to poll ROS master for topics
   if (options_.all_topics_)
     poll_topic_timer_ = nh_.createTimer(ros::Duration(1.0),
-                                        boost::bind(&Snapshotter::pollTopics, this,
-                                                    boost::placeholders::_1, &options_));
+                                        std::bind(&Snapshotter::pollTopics, this,
+                                                  std::placeholders::_1, &options_));
 
   // Use multiple callback threads
   ros::MultiThreadedSpinner spinner(4);  // Use 4 threads
